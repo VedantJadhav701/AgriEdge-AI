@@ -1,0 +1,4 @@
+Split,Images,Crops,Conditions
+Train,25373,17,103
+Test,4476,17,103
+Total,29849,17,103

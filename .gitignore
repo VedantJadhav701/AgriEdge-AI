@@ -1,0 +1,31 @@
+# Built files
+*.apk
+*.aar
+*.dex
+*.class
+
+# Large AI model binaries (>100MB)
+*.gguf
+*.onnx
+*.bin
+models/*.onnx
+models/*.gguf
+
+# Android & Gradle
+.gradle/
+build/
+app/build/
+app/.cxx/
+app/.gradle/
+app/.idea/
+.idea/
+*.iml
+local.properties
+
+# OS & Temporary files
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+scratch/
+.system_generated/

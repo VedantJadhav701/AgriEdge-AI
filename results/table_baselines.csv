@@ -1,0 +1,5 @@
+model,params_m,accuracy,macro_f1,train_time_s
+mobilenetv3_large_100,4.3,0.9167,0.9038,158.7
+efficientnet_b0,4.1,0.9303,0.9184,174.3
+resnet18,11.2,0.8103,0.7971,121.9
+AgriEdge-SigLIP (already trained),93.0,0.9247,0.9152,
