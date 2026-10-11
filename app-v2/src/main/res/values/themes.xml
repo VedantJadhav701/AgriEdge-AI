@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.AgriEdge" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">#1B4332</item>
+        <item name="android:navigationBarColor">#1B4332</item>
+        <item name="android:colorBackground">#F8F9FA</item>
+    </style>
+</resources>

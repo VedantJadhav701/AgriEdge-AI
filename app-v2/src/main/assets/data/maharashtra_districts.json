@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Jalgaon", "name_mr": "जळगाव", "name_hi": "जलगांव",
+    "crops": ["banana", "papaya"],
+    "season": "Banana: perennial. Papaya: year-round with careful planting.",
+    "status": "SEED - verify with KVK Jalgaon before use"
+  },
+  {
+    "name": "Dhule", "name_mr": "धुळे", "name_hi": "धुलिया",
+    "crops": ["banana", "papaya"],
+    "season": "Banana: perennial. Papaya: year-round.",
+    "status": "SEED - verify with KVK Dhule before use"
+  },
+  {
+    "name": "Nandurbar", "name_mr": "नंदुरबार", "name_hi": "नंदुरबार",
+    "crops": ["banana", "papaya"],
+    "season": "Banana: perennial. Papaya: year-round.",
+    "status": "SEED - verify with KVK Nandurbar before use"
+  },
+  {
+    "name": "Jalna", "name_mr": "जालना", "name_hi": "जालना",
+    "crops": ["banana"],
+    "season": "Banana: perennial.",
+    "status": "SEED - verify with KVK Jalna before use"
+  },
+  {
+    "name": "Nanded", "name_mr": "नांदेड", "name_hi": "नांदेड़",
+    "crops": ["banana"],
+    "season": "Banana: perennial.",
+    "status": "SEED - verify with KVK Nanded before use"
+  },
+  {
+    "name": "Buldhana", "name_mr": "बुलढाणा", "name_hi": "बुलढाणा",
+    "crops": ["banana"],
+    "season": "Banana: perennial.",
+    "status": "SEED - verify with KVK Buldhana before use"
+  },
+  {
+    "name": "Satara", "name_mr": "सातारा", "name_hi": "सतारा",
+    "crops": ["banana", "papaya"],
+    "season": "Banana: perennial. Papaya: year-round.",
+    "status": "SEED - verify with KVK Satara before use"
+  },
+  {
+    "name": "Pune", "name_mr": "पुणे", "name_hi": "पुणे",
+    "crops": ["papaya"],
+    "season": "Papaya: year-round.",
+    "status": "SEED - verify with KVK Baramati before use"
+  },
+  {
+    "name": "Nashik", "name_mr": "नाशिक", "name_hi": "नासिक",
+    "crops": ["banana"],
+    "season": "Banana: perennial.",
+    "status": "SEED - verify with KVK Nashik before use"
+  }
+]

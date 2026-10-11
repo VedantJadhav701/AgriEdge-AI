@@ -3,6 +3,9 @@
 *.aar
 *.dex
 *.class
+*.a
+*.so
+*.o
 
 # Large AI model binaries (>100MB)
 *.gguf
@@ -10,6 +13,7 @@
 *.bin
 models/*.onnx
 models/*.gguf
+models/*.bin
 
 # Android & Gradle
 .gradle/
@@ -18,9 +22,25 @@ app/build/
 app/.cxx/
 app/.gradle/
 app/.idea/
+app-v2/build/
+app-v2/.cxx/
+app-v2/.gradle/
+app-v2/.idea/
+**/.cxx/
+**/.gradle/
+**/build/
 .idea/
 *.iml
 local.properties
+**/local.properties
+
+# Python cache & temporary files
+__pycache__/
+*.pyc
+training/out/*.gguf
+training/out/checkpoints/
+training/out/agriedge-qwen05b-merged/
+training/out/agriedge-qwen05b-lora/
 
 # OS & Temporary files
 .DS_Store

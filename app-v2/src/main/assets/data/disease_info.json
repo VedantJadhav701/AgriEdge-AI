@@ -1,0 +1,114 @@
+[
+  {
+    "label": "banana__healthy",
+    "name": {"en": "Healthy", "mr": "निरोगी", "hi": "स्वस्थ"},
+    "explanation": {
+      "en": "No disease symptoms are visible on this leaf.",
+      "mr": "या पानावर रोगाची लक्षणे दिसत नाहीत.",
+      "hi": "इस पत्ती पर रोग के लक्षण नहीं दिख रहे।"
+    },
+    "treatment": {
+      "en": "Keep balanced nutrition and regular irrigation. Check the plantation every week and remove leaves with spots early.",
+      "mr": "संतुलित खत आणि नियमित पाणी द्या. दर आठवड्याला बागेची तपासणी करा आणि डाग दिसणारी पाने लवकर काढा.",
+      "hi": "संतुलित पोषण और नियमित सिंचाई रखें। हर हफ्ते बाग का निरीक्षण करें और धब्बे वाली पत्तियाँ जल्दी हटाएँ।"
+    }
+  },
+  {
+    "label": "banana__segatoka",
+    "name": {"en": "Sigatoka leaf spot", "mr": "सिगाटोका पानावरील डाग", "hi": "सिगाटोका पत्ती धब्बा"},
+    "explanation": {
+      "en": "Yellow streaks on the leaf turn dark brown or black with grey centres. It spreads quickly in wet weather.",
+      "mr": "पानावर पिवळे पट्टे येऊन ते गडद तपकिरी किंवा काळे होतात, मध्यभागी राखाडी. ओलसर हवामानात वेगाने पसरतो.",
+      "hi": "पत्ती पर पीली धारियाँ गहरे भूरे या काले होकर बीच में धूसर हो जाती हैं। नम मौसम में तेज़ी से फैलता है।"
+    },
+    "treatment": {
+      "en": "Remove and destroy the most affected leaves. Improve drainage and avoid crowding. Spray a registered fungicide exactly as the label says, and rotate active ingredients to avoid resistance. Ask your KVK for the locally approved product.",
+      "mr": "सर्वात जास्त बाधित पाने काढून नष्ट करा. निचरा सुधारा आणि झाडांची गर्दी टाळा. नोंदणीकृत बुरशीनाशक लेबलनुसार फवारा आणि प्रतिकार टाळण्यासाठी घटक बदलत राहा. स्थानिक मान्यताप्राप्त औषधासाठी KVK चा सल्ला घ्या.",
+      "hi": "सबसे अधिक संक्रमित पत्तियाँ हटाकर नष्ट करें। जल निकासी सुधारें और भीड़ न होने दें। पंजीकृत फफूंदनाशी लेबल के अनुसार छिड़कें और प्रतिरोध से बचने के लिए सक्रिय घटक बदलते रहें। स्थानीय स्वीकृत उत्पाद के लिए KVK से पूछें।"
+    }
+  },
+  {
+    "label": "banana__xamthomonas",
+    "name": {"en": "Bacterial wilt (Xanthomonas)", "mr": "जिवाणू मर (झॅन्थोमोनास)", "hi": "जीवाणु मुरझान (ज़ेन्थोमोनास)"},
+    "explanation": {
+      "en": "Leaves yellow and wilt progressively. The infection can spread through tools and soil.",
+      "mr": "पाने पिवळी पडून हळूहळू कोमेजतात. अवजारे आणि मातीमार्फत संसर्ग पसरू शकतो.",
+      "hi": "पत्तियाँ पीली होकर धीरे-धीरे मुरझाती हैं। औज़ार और मिट्टी से संक्रमण फैल सकता है।"
+    },
+    "treatment": {
+      "en": "Cut out and destroy infected plants with a disinfected tool. Do not move soil or suckers from infected fields. Disinfect tools between plants. Ask your KVK about approved bactericides and clean planting material.",
+      "mr": "बाधित झाडे निर्जंतुक अवजाराने काढून पुरा किंवा जाळा. बाधित शेतातील माती किंवा फुटवे इतरत्र नेऊ नका. प्रत्येक झाडानंतर अवजार निर्जंतुक करा. मान्यताप्राप्त जिवाणूनाशक आणि स्वच्छ रोपांसाठी KVK चा सल्ला घ्या.",
+      "hi": "संक्रमित पौधे निर्जमित औज़ार से हटाकर दबाएँ या जलाएँ। संक्रमित खेत की मिट्टी या सकर दूसरी जगह न ले जाएँ। हर पौधे के बाद औज़ार साफ़ करें। स्वीकृत जीवाणुनाशी और स्वच्छ पौध के लिए KVK से पूछें।"
+    }
+  },
+  {
+    "label": "papaya__healthy",
+    "name": {"en": "Healthy", "mr": "निरोगी", "hi": "स्वस्थ"},
+    "explanation": {
+      "en": "The leaf looks healthy with no visible disease symptoms.",
+      "mr": "पान निरोगी दिसत आहे, रोगाची दृश्य लक्षणे नाहीत.",
+      "hi": "पत्ती स्वस्थ दिख रही है, रोग के दृश्य लक्षण नहीं हैं।"
+    },
+    "treatment": {
+      "en": "Maintain good drainage and balanced nutrition. Scout the orchard weekly for aphids, whiteflies and leaf spots.",
+      "mr": "चांगला निचरा आणि संतुलित खत ठेवा. दर आठवड्याला माव्या, पांढऱ्या माशी आणि पानांवरील डागांसाठी बागेची तपासणी करा.",
+      "hi": "अच्छी जल निकासी और संतुलित पोषण रखें। हर हफ्ते माहू, सफ़ेद मक्खी और पत्ती धब्बों के लिए बाग देखें।"
+    }
+  },
+  {
+    "label": "papaya__anthracnose",
+    "name": {"en": "Anthracnose", "mr": "अँथ्रॅकनोज (करपा)", "hi": "एंथ्रेक्नोज"},
+    "explanation": {
+      "en": "Circular water-soaked spots turn brown. Orange or pink spore masses appear in wet weather.",
+      "mr": "गोलाकार पाणीदार डाग तपकिरी होतात. ओलसर हवामानात नारिंगी किंवा गुलाबी बुरशीचे थर दिसतात.",
+      "hi": "गोल पानीदार धब्बे भूरे हो जाते हैं। नम मौसम में नारंगी या गुलाबी बीजाणु समूह दिखते हैं।"
+    },
+    "treatment": {
+      "en": "Remove infected leaves and fruit and destroy them. Avoid wounding fruit at harvest. In wet weather, spray a copper-based or other registered fungicide as per label. Avoid overhead irrigation late in the day.",
+      "mr": "बाधित पाने आणि फळे काढून नष्ट करा. काढणीच्या वेळी फळांना इजा होऊ देऊ नका. पावसाळ्यात लेबलनुसार तांबेयुक्त किंवा नोंदणीकृत बुरशीनाशक फवारा. दिवसाच्या शेवटी तुषार सिंचन टाळा.",
+      "hi": "संक्रमित पत्तियाँ और फल हटाकर नष्ट करें। तुड़ाई के समय फलों को चोट न लगने दें। नम मौसम में लेबल के अनुसार तांबा आधारित या पंजीकृत फफूंदनाशी छिड़कें। शाम को ऊपर से सिंचाई से बचें।"
+    }
+  },
+  {
+    "label": "papaya__bacterialspot",
+    "name": {"en": "Bacterial spot", "mr": "जिवाणू ठिपके", "hi": "जीवाणु धब्बा"},
+    "explanation": {
+      "en": "Small, angular water-soaked spots on leaves that later turn dark and may split.",
+      "mr": "पानांवर लहान, कोनीय पाणीदार डाग येतात जे नंतर गडद होऊन फुटू शकतात.",
+      "hi": "पत्तियों पर छोटे, कोणीय पानीदार धब्बे आते हैं जो बाद में गहरे होकर फट सकते हैं।"
+    },
+    "treatment": {
+      "en": "Use clean, certified seedlings. Remove infected leaves and keep the orchard free of weeds. Apply a copper-based bactericide as per label. Avoid working in the field when plants are wet.",
+      "mr": "स्वच्छ, प्रमाणित रोपे वापरा. बाधित पाने काढा आणि बाग तणमुक्त ठेवा. लेबलनुसार तांबेयुक्त जिवाणूनाशक फवारा. झाडे ओली असताना शेतात काम टाळा.",
+      "hi": "साफ़, प्रमाणित पौध लगाएँ। संक्रमित पत्तियाँ हटाएँ और बाग खरपतवार मुक्त रखें। लेबल के अनुसार तांबा आधारित जीवाणुनाशी छिड़कें। गीले पौधों पर काम करने से बचें।"
+    }
+  },
+  {
+    "label": "papaya__curl",
+    "name": {"en": "Leaf curl virus", "mr": "पान मुरडा विषाणू", "hi": "पत्ती मरोड़ विषाणु"},
+    "explanation": {
+      "en": "Leaves curl up or down, veins thicken, and plants stay stunted. Whiteflies spread it.",
+      "mr": "पाने वर किंवा खाली मुरडतात, शिरा जाड होतात आणि झाडे खुंटतात. पांढरी माशी प्रसार करते.",
+      "hi": "पत्तियाँ ऊपर या नीचे मुड़ती हैं, नसें मोटी होती हैं और पौधा रुक जाता है। सफ़ेद मक्खी इसे फैलाती है।"
+    },
+    "treatment": {
+      "en": "There is no cure for infected plants. Remove and destroy them early. Control whiteflies with yellow sticky traps and approved insecticides as per label. Ask your KVK for tolerant varieties.",
+      "mr": "बाधित झाडांवर उपचार नाही. लवकर काढून नष्ट करा. पिवळे चिकट सापळे आणि लेबलनुसार मान्य कीटकनाशक वापरून पांढरी माशी नियंत्रित करा. सहनशील जातींसाठी KVK चा सल्ला घ्या.",
+      "hi": "संक्रमित पौधों का कोई इलाज नहीं है। जल्दी हटाकर नष्ट करें। पीले चिपचिपे जाल और लेबल के अनुसार अनुमोदित कीटनाशी से सफ़ेद मक्खी नियंत्रित करें। सहनशील किस्मों के लिए KVK से पूछें।"
+    }
+  },
+  {
+    "label": "papaya__ringspot",
+    "name": {"en": "Ringspot virus", "mr": "रिंगस्पॉट विषाणू", "hi": "रिंगस्पॉट विषाणु"},
+    "explanation": {
+      "en": "Yellow mosaic on leaves, oily water-soaked streaks on stems, and ring-shaped marks on fruit. Aphids spread it.",
+      "mr": "पानांवर पिवळे मोझॅक, खोडावर तेलकट पाणीदार रेषा आणि फळांवर वर्तुळाकार चट्टे. मावा किडीमार्फत प्रसार होतो.",
+      "hi": "पत्तियों पर पीला मोज़ेक, तने पर तैलीय पानीदार धारियाँ और फलों पर गोल निशान। माहू से फैलता है।"
+    },
+    "treatment": {
+      "en": "There is no cure for infected plants. Remove them promptly to reduce the source. Control aphids and weeds that host the virus. Use certified virus-free seedlings and tolerant varieties, and plant away from older infected orchards.",
+      "mr": "बाधित झाडांवर उपचार नाही. प्रादुर्भाव कमी करण्यासाठी ती लवकर काढा. विषाणूचे यजमान असलेले मावा आणि तण नियंत्रित करा. प्रमाणित विषाणूमुक्त रोपे आणि सहनशील जाती वापरा आणि जुन्या बाधित बागेपासून दूर लागवड करा.",
+      "hi": "संक्रमित पौधों का कोई इलाज नहीं है। स्रोत कम करने के लिए तुरंत हटाएँ। विषाणु के वाहक माहू और खरपतवार नियंत्रित करें। प्रमाणित विषाणुमुक्त पौध और सहनशील किस्में लगाएँ और पुराने संक्रमित बाग से दूर रोपें।"
+    }
+  }
+]
