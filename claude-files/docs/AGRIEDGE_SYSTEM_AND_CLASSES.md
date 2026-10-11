@@ -249,8 +249,16 @@ The model covers **17 major Indian crops** and **103 specific crop/disease condi
 ### 3. Model Synchronization with Timestamp Invalidation
 - Updated `ModelManager.kt` to compare `lastModified` timestamps in addition to byte lengths. When a newer model is pushed to `/sdcard/Android/data/com.agriedge.app/files/models/`, the internal app sandbox cache (`context.filesDir/models/`) automatically updates.
 
-### 4. Scoped Storage Direct Path
-- Pushed models to app-specific external storage (`/sdcard/Android/data/com.agriedge.app/files/models/`), which bypasses Android 11+ Scoped Storage restrictions without requiring special runtime permissions.
+### 5. Multi-Byte UTF-8 Streaming & Memory Reset Fix (Marathi / Hindi Crash Resolution)
+- **Problem**: When generating answers in Marathi or Hindi, the app process terminated abruptly with `Fatal signal 6 (SIGABRT)` in `libagriedge_llm.so`.
+- **Root Cause**: 
+  1. Devanagari characters in UTF-8 are 3-byte sequences (e.g. `\xE0\xA4\x...`). Byte-pair encoding (BPE / SentencePiece) in `llama.cpp` often emits tokens that represent partial byte sequences (1 or 2 bytes). Passing incomplete UTF-8 bytes directly to JNI `env->NewStringUTF()` causes the Android Runtime (ART) `CheckJNI` validator to trigger `SIGABRT` and abort the process.
+  2. The KV cache was retaining residual tokens from previous turns, causing context limits to overflow on long prompts.
+- **Resolution**:
+  1. Implemented a byte-level UTF-8 prefix validator in C++ (`get_valid_utf8_prefix_len()`) that buffers incoming token pieces and only dispatches complete, valid UTF-8 sequences to the JVM.
+  2. Flushes any remaining bytes safely at the end of generation.
+  3. Integrated `llama_memory_clear(llama_get_memory(ctx->ctx), true)` at the start of each generation to ensure a fresh, uncorrupted context.
+- **Result**: Smooth, continuous token streaming in Marathi, Hindi, and English with zero crashes.
 
 ---
 
