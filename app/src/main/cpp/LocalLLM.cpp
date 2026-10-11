@@ -81,6 +81,51 @@ Java_com_agriedge_app_llm_LocalLLM_nativeIsReady(
     return ctx->isLoaded ? JNI_TRUE : JNI_FALSE;
 }
 
+// Helper: returns the byte length of complete UTF-8 characters at the start of s
+static size_t get_valid_utf8_prefix_len(const std::string& s) {
+    size_t i = 0;
+    size_t last_valid = 0;
+    while (i < s.size()) {
+        unsigned char c = static_cast<unsigned char>(s[i]);
+        size_t char_len = 0;
+        if (c < 0x80) {
+            char_len = 1;
+        } else if ((c & 0xE0) == 0xC0) {
+            char_len = 2;
+        } else if ((c & 0xF0) == 0xE0) {
+            char_len = 3;
+        } else if ((c & 0xF8) == 0xF0) {
+            char_len = 4;
+        } else {
+            // Invalid lead byte, skip 1 byte
+            i++;
+            last_valid = i;
+            continue;
+        }
+
+        if (i + char_len <= s.size()) {
+            bool ok = true;
+            for (size_t j = 1; j < char_len; ++j) {
+                if ((static_cast<unsigned char>(s[i + j]) & 0xC0) != 0x80) {
+                    ok = false;
+                    break;
+                }
+            }
+            if (ok) {
+                i += char_len;
+                last_valid = i;
+            } else {
+                i++;
+                last_valid = i;
+            }
+        } else {
+            // Incomplete character at the end of the buffer; wait for next token bytes
+            break;
+        }
+    }
+    return last_valid;
+}
+
 JNIEXPORT void JNICALL
 Java_com_agriedge_app_llm_LocalLLM_nativeGenerate(
     JNIEnv* env,
@@ -108,6 +153,12 @@ Java_com_agriedge_app_llm_LocalLLM_nativeGenerate(
     if (onTokenMethod == nullptr) {
         LOGE("Failed to find onToken method on callback object");
         return;
+    }
+
+    // Reset memory/KV cache before each generation to prevent context overflow & stale cache
+    llama_memory_t mem = llama_get_memory(ctx->ctx);
+    if (mem != nullptr) {
+        llama_memory_clear(mem, true);
     }
 
     // Tokenize prompt
@@ -159,6 +210,7 @@ Java_com_agriedge_app_llm_LocalLLM_nativeGenerate(
         return;
     }
 
+    std::string utf8_accum;
     int n_generated = 0;
     while (n_generated < maxTokens && !ctx->stopRequested.load()) {
         llama_token new_token_id = llama_sampler_sample(sampler, ctx->ctx, -1);
@@ -171,10 +223,21 @@ Java_com_agriedge_app_llm_LocalLLM_nativeGenerate(
         char pieceBuf[256];
         int n_piece = llama_token_to_piece(ctx->vocab, new_token_id, pieceBuf, sizeof(pieceBuf), 0, true);
         if (n_piece > 0) {
-            std::string pieceStr(pieceBuf, n_piece);
-            jstring jToken = env->NewStringUTF(pieceStr.c_str());
-            env->CallVoidMethod(callback, onTokenMethod, jToken);
-            env->DeleteLocalRef(jToken);
+            utf8_accum.append(pieceBuf, n_piece);
+            size_t valid_len = get_valid_utf8_prefix_len(utf8_accum);
+            if (valid_len > 0) {
+                std::string valid_str = utf8_accum.substr(0, valid_len);
+                utf8_accum.erase(0, valid_len);
+                jstring jToken = env->NewStringUTF(valid_str.c_str());
+                if (jToken != nullptr) {
+                    env->CallVoidMethod(callback, onTokenMethod, jToken);
+                    env->DeleteLocalRef(jToken);
+                    if (env->ExceptionCheck()) {
+                        env->ExceptionClear();
+                        break;
+                    }
+                }
+            }
         }
 
         // Decode single new token
@@ -185,6 +248,18 @@ Java_com_agriedge_app_llm_LocalLLM_nativeGenerate(
         }
 
         n_generated++;
+    }
+
+    // Flush any remaining valid bytes in accumulator
+    if (!utf8_accum.empty()) {
+        jstring jToken = env->NewStringUTF(utf8_accum.c_str());
+        if (jToken != nullptr) {
+            env->CallVoidMethod(callback, onTokenMethod, jToken);
+            env->DeleteLocalRef(jToken);
+            if (env->ExceptionCheck()) {
+                env->ExceptionClear();
+            }
+        }
     }
 
     llama_sampler_free(sampler);
