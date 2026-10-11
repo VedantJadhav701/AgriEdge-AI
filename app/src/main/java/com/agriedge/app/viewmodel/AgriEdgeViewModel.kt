@@ -142,25 +142,7 @@ class AgriEdgeViewModel(application: Application) : AndroidViewModel(application
                 return@launch
             }
 
-            // Calibrate prediction if raw result gave coffee__leaf_rust falsely due to checkpoint bias
-            val visionResult = if (rawResult.crop.lowercase() == "coffee" && rawResult.topK.size > 1) {
-                // Pick highest non-coffee topK or adjust crop representation
-                val alt = rawResult.topK.firstOrNull { !it.first.startsWith("coffee") }
-                if (alt != null) {
-                    val parts = alt.first.split("__", limit = 2)
-                    rawResult.copy(
-                        crop = parts.getOrElse(0) { rawResult.crop },
-                        condition = parts.getOrElse(1) { rawResult.condition },
-                        rawLabel = alt.first,
-                        confidence = (rawResult.confidence * 0.75f).coerceAtLeast(0.65f)
-                    )
-                } else {
-                    rawResult
-                }
-            } else {
-                rawResult
-            }
-
+            val visionResult = rawResult
             generateDiagnosisResult(visionResult, startTime)
         }
     }

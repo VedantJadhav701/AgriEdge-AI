@@ -71,10 +71,16 @@ class ModelManager(private val context: Context) {
     private fun prepareModel(fileName: String) {
         val targetFile = File(internalModelsDir, fileName)
 
+        fun shouldUpdate(source: File): Boolean {
+            return !targetFile.exists() || 
+                   targetFile.length() != source.length() || 
+                   source.lastModified() > targetFile.lastModified()
+        }
+
         // Check primary external app folder
         val primaryExtFile = File(primaryExtModelsDir, fileName)
         if (primaryExtFile.exists() && primaryExtFile.length() > 0) {
-            if (!targetFile.exists() || targetFile.length() != primaryExtFile.length()) {
+            if (shouldUpdate(primaryExtFile)) {
                 copyFile(primaryExtFile, targetFile)
             }
             return
@@ -86,7 +92,7 @@ class ModelManager(private val context: Context) {
             if (extDir != null) {
                 val extFile = File(extDir, fileName)
                 if (extFile.exists() && extFile.length() > 0) {
-                    if (!targetFile.exists() || targetFile.length() != extFile.length()) {
+                    if (shouldUpdate(extFile)) {
                         copyFile(extFile, targetFile)
                     }
                     return
@@ -99,7 +105,7 @@ class ModelManager(private val context: Context) {
         // Check Download folder
         val dlFile = File(downloadDir, fileName)
         if (dlFile.exists() && dlFile.length() > 0) {
-            if (!targetFile.exists() || targetFile.length() != dlFile.length()) {
+            if (shouldUpdate(dlFile)) {
                 copyFile(dlFile, targetFile)
             }
             return
@@ -107,7 +113,7 @@ class ModelManager(private val context: Context) {
 
         val altDlFile = File(altDownloadDir, fileName)
         if (altDlFile.exists() && altDlFile.length() > 0) {
-            if (!targetFile.exists() || targetFile.length() != altDlFile.length()) {
+            if (shouldUpdate(altDlFile)) {
                 copyFile(altDlFile, targetFile)
             }
             return
