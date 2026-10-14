@@ -10,6 +10,7 @@ import com.agriedge.app.classifier.VisionClassifier
 import com.agriedge.app.config.AppConfig
 import com.agriedge.app.config.AppConfig.Lang
 import com.agriedge.app.data.FarmData
+import com.agriedge.app.embedding.EmbeddingGemmaEngine
 import com.agriedge.app.i18n.Strings
 import com.agriedge.app.llm.LLMState
 import com.agriedge.app.llm.LocalLLM
@@ -46,6 +47,7 @@ sealed class ScreenState {
 class AgriEdgeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val modelManager = ModelManager(application)
+    private val embeddingEngine = EmbeddingGemmaEngine.getInstance(application)
     private var visionClassifier: VisionClassifier? = null
     private var localLLM: LocalLLM? = null
 
@@ -179,6 +181,10 @@ class AgriEdgeViewModel(application: Application) : AndroidViewModel(application
 
     private fun buildExplainPrompt(result: ClassifierResult): String {
         val lang = _lang.value
+        val profile = embeddingEngine.getProfile(result.rawLabel)
+        if (profile != null) {
+            return embeddingEngine.buildGroundedPrompt(result.rawLabel, null, lang.promptName)
+        }
         val guidance = _farmData.value?.diseaseFor(result.rawLabel)?.treatment?.get(lang.code).orEmpty()
         val system = "You are AgriEdge AI, an offline farm advisor for Maharashtra. Reply only in ${lang.promptName}. " +
                 "Be brief (under 120 words), practical and calm. Do not invent chemical doses; refer to the product label or the local KVK."
@@ -191,9 +197,8 @@ class AgriEdgeViewModel(application: Application) : AndroidViewModel(application
     fun sendDiagnosisFollowUp(question: String) {
         val cur = _screenState.value as? ScreenState.Result ?: return
         val r = cur.classifierResult
-        val system = "You are AgriEdge AI. The farmer's ${r.crop} has ${r.condition}. " +
-                "Reply only in ${_lang.value.promptName}. Be brief and practical. Do not invent chemical doses."
-        ask(_diagnosisChatMessages, _isDiagnosisChatGenerating, question, system, AppConfig.SLM_MAX_TOKENS_CHAT)
+        val groundedPrompt = embeddingEngine.buildGroundedPrompt(r.rawLabel, question, _lang.value.promptName)
+        askDirectPrompt(_diagnosisChatMessages, _isDiagnosisChatGenerating, question, groundedPrompt, AppConfig.SLM_MAX_TOKENS_CHAT)
     }
 
     fun sendAgriSlmQuestion(question: String) {
@@ -202,11 +207,11 @@ class AgriEdgeViewModel(application: Application) : AndroidViewModel(application
         ask(_agriSlmChatMessages, _isAgriSlmGenerating, question, system, AppConfig.SLM_MAX_TOKENS_CHAT)
     }
 
-    private fun ask(
+    private fun askDirectPrompt(
         flow: MutableStateFlow<List<ChatMessage>>,
         generating: MutableStateFlow<Boolean>,
         question: String,
-        system: String,
+        fullPrompt: String,
         maxTokens: Int
     ) {
         if (question.isBlank() || generating.value) return
@@ -220,7 +225,7 @@ class AgriEdgeViewModel(application: Application) : AndroidViewModel(application
             val llm = localLLM
             if (llm != null && llm.isReady) {
                 try {
-                    llm.generate(chatml(system, question), maxTokens = maxTokens, temperature = 0.5f) { t ->
+                    llm.generate(fullPrompt, maxTokens = maxTokens, temperature = 0.5f) { t ->
                         sb.append(t)
                         flow.patch(bot.id, sb.toString(), true)
                     }
@@ -233,6 +238,16 @@ class AgriEdgeViewModel(application: Application) : AndroidViewModel(application
             flow.patch(bot.id, sb.toString(), false)
             generating.value = false
         }
+    }
+
+    private fun ask(
+        flow: MutableStateFlow<List<ChatMessage>>,
+        generating: MutableStateFlow<Boolean>,
+        question: String,
+        system: String,
+        maxTokens: Int
+    ) {
+        askDirectPrompt(flow, generating, question, chatml(system, question), maxTokens)
     }
 
     private fun MutableStateFlow<List<ChatMessage>>.patch(id: String, text: String, streaming: Boolean) {
