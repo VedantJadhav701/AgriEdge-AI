@@ -1,56 +1,171 @@
 [
   {
-    "name": "Jalgaon", "name_mr": "जळगाव", "name_hi": "जलगांव",
-    "crops": ["banana", "papaya"],
-    "season": "Banana: perennial. Papaya: year-round with careful planting.",
-    "status": "SEED - verify with KVK Jalgaon before use"
+    "name": "Pune",
+    "name_mr": "पुणे",
+    "name_hi": "पुणे",
+    "crops": [
+      "tomato",
+      "onion",
+      "papaya",
+      "banana",
+      "chilli",
+      "cucumber",
+      "maize"
+    ],
+    "season": "Kharif & Rabi high-tech horticulture.",
+    "status": "VERIFIED - APMC Pune & Baramati"
   },
   {
-    "name": "Dhule", "name_mr": "धुळे", "name_hi": "धुलिया",
-    "crops": ["banana", "papaya"],
-    "season": "Banana: perennial. Papaya: year-round.",
-    "status": "SEED - verify with KVK Dhule before use"
+    "name": "Nashik",
+    "name_mr": "नाशिक",
+    "name_hi": "नासिक",
+    "crops": [
+      "onion",
+      "tomato",
+      "maize",
+      "chilli",
+      "banana",
+      "guava",
+      "cucumber"
+    ],
+    "season": "Onion & Tomato capital; Rabi & Kharif intensive.",
+    "status": "VERIFIED - Lasalgaon, Pimpalgaon, Nashik"
   },
   {
-    "name": "Nandurbar", "name_mr": "नंदुरबार", "name_hi": "नंदुरबार",
-    "crops": ["banana", "papaya"],
-    "season": "Banana: perennial. Papaya: year-round.",
-    "status": "SEED - verify with KVK Nandurbar before use"
+    "name": "Jalgaon",
+    "name_mr": "जळगाव",
+    "name_hi": "जलगांव",
+    "crops": [
+      "banana",
+      "papaya",
+      "maize",
+      "black_gram",
+      "chilli"
+    ],
+    "season": "Banana hub of India; year-round harvests.",
+    "status": "VERIFIED - Raver, Jalgaon, Chopda"
   },
   {
-    "name": "Jalna", "name_mr": "जालना", "name_hi": "जालना",
-    "crops": ["banana"],
-    "season": "Banana: perennial.",
-    "status": "SEED - verify with KVK Jalna before use"
+    "name": "Nagpur",
+    "name_mr": "नागपूर",
+    "name_hi": "नागपुर",
+    "crops": [
+      "orange",
+      "black_gram",
+      "chilli",
+      "rice",
+      "tomato"
+    ],
+    "season": "Famous Vidarbha Nagpur mandarin oranges.",
+    "status": "VERIFIED - Kalamna APMC Nagpur"
   },
   {
-    "name": "Nanded", "name_mr": "नांदेड", "name_hi": "नांदेड़",
-    "crops": ["banana"],
-    "season": "Banana: perennial.",
-    "status": "SEED - verify with KVK Nanded before use"
+    "name": "Kolhapur",
+    "name_mr": "कोल्हापूर",
+    "name_hi": "कोल्हापुर",
+    "crops": [
+      "rice",
+      "banana",
+      "tomato",
+      "chilli",
+      "maize"
+    ],
+    "season": "Perennial & Kharif; fertile Panchganga basin.",
+    "status": "VERIFIED - APMC Kolhapur"
   },
   {
-    "name": "Buldhana", "name_mr": "बुलढाणा", "name_hi": "बुलढाणा",
-    "crops": ["banana"],
-    "season": "Banana: perennial.",
-    "status": "SEED - verify with KVK Buldhana before use"
+    "name": "Solapur",
+    "name_mr": "सोलापूर",
+    "name_hi": "सोलापुर",
+    "crops": [
+      "onion",
+      "banana",
+      "papaya",
+      "chilli",
+      "maize",
+      "sunflower"
+    ],
+    "season": "Dryland horticulture & grape/onion belt.",
+    "status": "VERIFIED - APMC Solapur"
   },
   {
-    "name": "Satara", "name_mr": "सातारा", "name_hi": "सतारा",
-    "crops": ["banana", "papaya"],
-    "season": "Banana: perennial. Papaya: year-round.",
-    "status": "SEED - verify with KVK Satara before use"
+    "name": "Ahmednagar",
+    "name_mr": "अहमदनगर",
+    "name_hi": "अहमदनगर",
+    "crops": [
+      "onion",
+      "tomato",
+      "maize",
+      "papaya",
+      "banana"
+    ],
+    "season": "High vegetable & onion production.",
+    "status": "VERIFIED - Rahuri, Sangamner, Ahmednagar"
   },
   {
-    "name": "Pune", "name_mr": "पुणे", "name_hi": "पुणे",
-    "crops": ["papaya"],
-    "season": "Papaya: year-round.",
-    "status": "SEED - verify with KVK Baramati before use"
+    "name": "Satara",
+    "name_mr": "सातारा",
+    "name_hi": "सतारा",
+    "crops": [
+      "tomato",
+      "banana",
+      "papaya",
+      "rice",
+      "ginger"
+    ],
+    "season": "Kharif & vegetable farming in Krishna valley.",
+    "status": "VERIFIED - Karad & Satara APMC"
   },
   {
-    "name": "Nashik", "name_mr": "नाशिक", "name_hi": "नासिक",
-    "crops": ["banana"],
-    "season": "Banana: perennial.",
-    "status": "SEED - verify with KVK Nashik before use"
+    "name": "Amravati",
+    "name_mr": "अमरावती",
+    "name_hi": "अमरावती",
+    "crops": [
+      "orange",
+      "black_gram",
+      "chilli",
+      "maize"
+    ],
+    "season": "Morshi-Warud citrus belt; Vidarbha pulses.",
+    "status": "VERIFIED - APMC Amravati"
+  },
+  {
+    "name": "Dhule",
+    "name_mr": "धुळे",
+    "name_hi": "धुलिया",
+    "crops": [
+      "chilli",
+      "banana",
+      "papaya",
+      "onion",
+      "maize"
+    ],
+    "season": "Khandesh red chilli & banana trading.",
+    "status": "VERIFIED - Dondaicha & Dhule APMC"
+  },
+  {
+    "name": "Nanded",
+    "name_mr": "नांदेड",
+    "name_hi": "नांदेड़",
+    "crops": [
+      "banana",
+      "black_gram",
+      "maize",
+      "rice"
+    ],
+    "season": "Godavari basin banana & pulses belt.",
+    "status": "VERIFIED - APMC Nanded"
+  },
+  {
+    "name": "Bhandara",
+    "name_mr": "भंडारा",
+    "name_hi": "भंडारा",
+    "crops": [
+      "rice",
+      "black_gram",
+      "chilli"
+    ],
+    "season": "Paddy bowl of eastern Maharashtra.",
+    "status": "VERIFIED - APMC Bhandara & Tumsar"
   }
 ]

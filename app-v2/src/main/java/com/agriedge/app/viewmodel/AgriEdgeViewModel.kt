@@ -202,9 +202,15 @@ class AgriEdgeViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun sendAgriSlmQuestion(question: String) {
-        val system = "You are AgriSLM, an offline agriculture expert for Maharashtra farmers. " +
-                "Reply only in ${_lang.value.promptName}. Be brief and practical. Do not invent chemical doses; refer to the label or KVK."
-        ask(_agriSlmChatMessages, _isAgriSlmGenerating, question, system, AppConfig.SLM_MAX_TOKENS_CHAT)
+        val mandiCtx = embeddingEngine.findMandiContext(question)
+        if (mandiCtx != null) {
+            val groundedPrompt = embeddingEngine.buildMarketGroundedPrompt(question, mandiCtx, _lang.value.promptName)
+            askDirectPrompt(_agriSlmChatMessages, _isAgriSlmGenerating, question, groundedPrompt, AppConfig.SLM_MAX_TOKENS_CHAT)
+        } else {
+            val system = "You are AgriSLM, an offline agriculture expert for Maharashtra farmers. " +
+                    "Reply only in ${_lang.value.promptName}. Be brief and practical. Do not invent chemical doses; refer to the label or KVK."
+            ask(_agriSlmChatMessages, _isAgriSlmGenerating, question, system, AppConfig.SLM_MAX_TOKENS_CHAT)
+        }
     }
 
     private fun askDirectPrompt(

@@ -10,12 +10,14 @@ import kotlin.math.sqrt
  * Offline EmbeddingGemma-2 Semantic Retrieval & Knowledge Engine for AgriEdge.
  *
  * Utilizes pre-computed 256-dimensional Matryoshka Representation Learning (MRL) embeddings
- * from Google DeepMind's google/embeddinggemma-2 across all 103 crop-disease classes.
- * Enables zero-latency (<1ms) vector similarity search, multimodal grounding, and offline RAG.
+ * from Google DeepMind's google/embeddinggemma-2 across:
+ *   1. All 103 crop-disease agronomic profiles.
+ *   2. Maharashtra APMC Mandi price records for natural language market queries.
  */
 class EmbeddingGemmaEngine private constructor(
     private val classEmbeddings: List<ClassVector>,
-    private val knowledgeMap: Map<String, AgronomicProfile>
+    private val knowledgeMap: Map<String, AgronomicProfile>,
+    private val mandiRecords: List<MandiRecord>
 ) {
 
     data class ClassVector(
@@ -37,6 +39,19 @@ class EmbeddingGemmaEngine private constructor(
         val preventativeMeasures: String
     )
 
+    data class MandiRecord(
+        val id: String,
+        val crop: String,
+        val cropTitle: String,
+        val district: String,
+        val market: String,
+        val minRs: Int,
+        val maxRs: Int,
+        val modalRs: Int,
+        val date: String,
+        val vector: FloatArray
+    )
+
     data class RetrievalMatch(
         val label: String,
         val crop: String,
@@ -46,10 +61,8 @@ class EmbeddingGemmaEngine private constructor(
     )
 
     val totalClasses: Int get() = classEmbeddings.size
+    val totalMandiRecords: Int get() = mandiRecords.size
 
-    /**
-     * Finds the Top-K most semantically similar classes for a given 256-dim query embedding.
-     */
     fun search(queryVector: FloatArray, topK: Int = 3): List<RetrievalMatch> {
         val normQuery = normalize(queryVector)
         val scored = classEmbeddings.map { cv ->
@@ -65,14 +78,46 @@ class EmbeddingGemmaEngine private constructor(
         return scored.sortedByDescending { it.similarity }.take(topK)
     }
 
-    /**
-     * Returns the verified agronomic knowledge profile for a specific class label.
-     */
     fun getProfile(label: String): AgronomicProfile? = knowledgeMap[label]
 
     /**
-     * Builds a structured, hallucination-free prompt for the SLM using retrieved verified facts.
+     * Finds matching mandi market records based on text query keywords (crop and/or district).
      */
+    fun findMandiContext(query: String): String? {
+        val q = query.lowercase()
+        val matches = mandiRecords.filter { r ->
+            val cropMatch = q.contains(r.crop.lowercase()) ||
+                    (r.crop == "banana" && (q.contains("केळी") || q.contains("केला"))) ||
+                    (r.crop == "papaya" && (q.contains("पपई") || q.contains("पपीता"))) ||
+                    (r.crop == "tomato" && (q.contains("टोमॅटो") || q.contains("टमाटर"))) ||
+                    (r.crop == "onion" && (q.contains("कांदा") || q.contains("प्याज"))) ||
+                    (r.crop == "orange" && (q.contains("संत्री") || q.contains("संतरा"))) ||
+                    (r.crop == "chilli" && (q.contains("मिरची") || q.contains("मिर्च"))) ||
+                    (r.crop == "rice" && (q.contains("भात") || q.contains("तांदूळ") || q.contains("चावल"))) ||
+                    (r.crop == "maize" && (q.contains("मका") || q.contains("मक्का"))) ||
+                    (r.crop == "black_gram" && (q.contains("उडीद") || q.contains("उड़द")))
+            
+            val distMatch = q.contains(r.district.lowercase()) ||
+                    (r.district == "Pune" && q.contains("पुणे")) ||
+                    (r.district == "Nashik" && (q.contains("नाशिक") || q.contains("नासिक"))) ||
+                    (r.district == "Jalgaon" && (q.contains("जळगाव") || q.contains("जलगांव"))) ||
+                    (r.district == "Nagpur" && (q.contains("नागपूर") || q.contains("नागपुर"))) ||
+                    (r.district == "Kolhapur" && (q.contains("कोल्हापूर") || q.contains("कोल्हापुर"))) ||
+                    (r.district == "Solapur" && (q.contains("सोलापूर") || q.contains("सोलापुर"))) ||
+                    (r.district == "Ahmednagar" && q.contains("अहमदनगर")) ||
+                    (r.district == "Dhule" && (q.contains("धुळे") || q.contains("धुलिया")))
+
+            cropMatch && (distMatch || !q.contains("pune") && !q.contains("nashik") && !q.contains("jalgaon") && !q.contains("nagpur"))
+        }
+
+        val topRecords = if (matches.isNotEmpty()) matches.take(3) else emptyList()
+        if (topRecords.isEmpty()) return null
+
+        return topRecords.joinToString("\n") { r ->
+            "- ${r.cropTitle} in ${r.district} (${r.market}): Modal Price Rs ${r.modalRs}/quintal (Range: Rs ${r.minRs} - ${r.maxRs}/quintal, Date: ${r.date})"
+        }
+    }
+
     fun buildGroundedPrompt(
         label: String,
         userQuery: String?,
@@ -105,6 +150,26 @@ class EmbeddingGemmaEngine private constructor(
         return "<|im_start|>system\n$system<|im_end|>\n<|im_start|>user\n$user<|im_end|>\n<|im_start|>assistant\n"
     }
 
+    /**
+     * Builds grounded prompt for market / mandi rate questions.
+     */
+    fun buildMarketGroundedPrompt(
+        userQuery: String,
+        mandiContext: String,
+        langPromptName: String
+    ): String {
+        val system = "You are AgriEdge AI, an offline farm market & APMC mandi rate expert for Maharashtra. " +
+                "Reply only in $langPromptName. Be brief, practical and accurate. " +
+                "State the modal price per quintal and the relevant market name from the verified data."
+
+        val user = "VERIFIED MAHARASHTRA APMC MANDI RATES (EmbeddingGemma-2 Knowledge):\n" +
+                "$mandiContext\n\n" +
+                "Farmer Question: $userQuery\n" +
+                "Answer the farmer directly quoting the exact prices from the verified context above."
+
+        return "<|im_start|>system\n$system<|im_end|>\n<|im_start|>user\n$user<|im_end|>\n<|im_start|>assistant\n"
+    }
+
     private fun dotProduct(a: FloatArray, b: FloatArray): Float {
         var sum = 0f
         val len = minOf(a.size, b.size)
@@ -127,6 +192,8 @@ class EmbeddingGemmaEngine private constructor(
     companion object {
         private const val EMBEDDINGS_ASSET = "data/embeddinggemma2_knowledge_256d.json"
         private const val KNOWLEDGE_ASSET = "data/agriedge_knowledge_103.json"
+        private const val MANDI_KNOWLEDGE_ASSET = "data/mandi_knowledge_records.json"
+        private const val MANDI_EMBEDDINGS_ASSET = "data/embeddinggemma2_mandi_256d.json"
 
         @Volatile
         private var instance: EmbeddingGemmaEngine? = null
@@ -140,8 +207,9 @@ class EmbeddingGemmaEngine private constructor(
         private fun load(context: Context): EmbeddingGemmaEngine {
             val knowledgeMap = mutableMapOf<String, AgronomicProfile>()
             val classVectors = mutableListOf<ClassVector>()
+            val mandiRecords = mutableListOf<MandiRecord>()
 
-            // 1. Load Knowledge Base
+            // 1. Load Agronomic Knowledge Base
             try {
                 context.assets.open(KNOWLEDGE_ASSET).use { isStream ->
                     val text = InputStreamReader(isStream).readText()
@@ -166,7 +234,7 @@ class EmbeddingGemmaEngine private constructor(
                 e.printStackTrace()
             }
 
-            // 2. Load 256d Embedding Vectors
+            // 2. Load 256d Agronomic Embedding Vectors
             try {
                 context.assets.open(EMBEDDINGS_ASSET).use { isStream ->
                     val text = InputStreamReader(isStream).readText()
@@ -186,7 +254,50 @@ class EmbeddingGemmaEngine private constructor(
                 e.printStackTrace()
             }
 
-            return EmbeddingGemmaEngine(classVectors, knowledgeMap)
+            // 3. Load Mandi Knowledge & 256d Embeddings
+            try {
+                val embMap = mutableMapOf<String, FloatArray>()
+                context.assets.open(MANDI_EMBEDDINGS_ASSET).use { isStream ->
+                    val text = InputStreamReader(isStream).readText()
+                    val root = JSONObject(text)
+                    val recsArr = root.getJSONArray("records")
+                    for (i in 0 until recsArr.length()) {
+                        val o = recsArr.getJSONObject(i)
+                        val id = o.getString("id")
+                        val arr = o.getJSONArray("embedding")
+                        val vec = FloatArray(arr.length()) { idx -> arr.getDouble(idx).toFloat() }
+                        embMap[id] = vec
+                    }
+                }
+
+                context.assets.open(MANDI_KNOWLEDGE_ASSET).use { isStream ->
+                    val text = InputStreamReader(isStream).readText()
+                    val array = JSONArray(text)
+                    for (i in 0 until array.length()) {
+                        val o = array.getJSONObject(i)
+                        val id = o.getString("id")
+                        val vec = embMap[id] ?: FloatArray(256)
+                        mandiRecords.add(
+                            MandiRecord(
+                                id = id,
+                                crop = o.getString("crop"),
+                                cropTitle = o.getString("crop_title"),
+                                district = o.getString("district"),
+                                market = o.getString("market"),
+                                minRs = o.optInt("min_rs"),
+                                maxRs = o.optInt("max_rs"),
+                                modalRs = o.optInt("modal_rs"),
+                                date = o.optString("date"),
+                                vector = vec
+                            )
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            return EmbeddingGemmaEngine(classVectors, knowledgeMap, mandiRecords)
         }
     }
 }
